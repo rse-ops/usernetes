@@ -38,8 +38,8 @@ NODE_SHELL := $(COMPOSE) exec \
 
 ifeq ($(CONTAINER_ENGINE),nerdctl)
 ifneq (,$(wildcard $(XDG_RUNTIME_DIR)/bypass4netnsd.sock))
-	export U7S_B4NN := true
-	export U7S_B4NN_IGNORE_SUBNETS := ["10.96.0.0/16", "10.244.0.0/16", "$(U7S_NODE_SUBNET)"]
+export U7S_B4NN := true
+export U7S_B4NN_IGNORE_SUBNETS := ["10.96.0.0/16", "$(U7S_NODE_SUBNET)"]
 endif
 endif
 

@@ -42,8 +42,9 @@ services:
     annotations:
       # Accelerate network for nerdctl >= 2.0.0-beta.4 with bypass4netns >= 0.4.1
       "nerdctl/bypass4netns": "${U7S_B4NN:-false}"
-      "nerdctl/bypass4netns-ignore-bind": "true"
+      "nerdctl/bypass4netns-ignore-bind": "false"
       "nerdctl/bypass4netns-ignore-subnets": "${U7S_B4NN_IGNORE_SUBNETS:-}"
+      "nerdctl/ports" : "[{ \"hostIP\" : \"10.0.1.119\", \"hostPort\" : 8080, \"containerPort\" : 80, \"protocol\" : \"tcp\" },{ \"hostIP\" : \"10.0.1.119\", \"hostPort\" : 10250, \"containerPort\" : 10250, \"protocol\" : \"tcp\" }]"
 networks:
   default:
     ipam:
