@@ -5,6 +5,12 @@ HOSTNAME ?= $(shell hostname)
 # HOSTNAME is the name of the physical host
 export HOSTNAME := $(HOSTNAME)
 
+# Exposed ports to the host (default to same as in container)
+export U7S_EXPOSED_PORT_ETCD ?= 2379
+export U7S_EXPOSED_PORT_KUBE_APISERVER ?= 6443
+export U7S_EXPOSED_PORT_KUBELET ?= 10250
+export U7S_EXPOSED_PORT_FLANNEL ?= 8472
+
 HOST_IP ?= $(shell ip --json route get 1 | jq -r .[0].prefsrc)
 NODE_NAME ?= u7s-$(HOSTNAME)
 NODE_SUBNET ?= $(shell $(CURDIR)/Makefile.d/node-subnet.sh)
@@ -34,6 +40,7 @@ NODE_SHELL := $(COMPOSE) exec \
 	-e U7S_NODE_NAME=$(U7S_NODE_NAME) \
 	-e U7S_NODE_SUBNET=$(U7S_NODE_SUBNET) \
 	-e U7S_NODE_IP=$(U7S_NODE_IP) \
+	-e U7S_EXPOSED_PORT_KUBE_APISERVER=$(U7S_EXPOSED_PORT_KUBE_APISERVER) \
 	$(NODE_SERVICE_NAME)
 
 ifeq ($(CONTAINER_ENGINE),nerdctl)

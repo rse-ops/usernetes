@@ -12,13 +12,13 @@ services:
         ipv4_address: ${U7S_NODE_IP}
     ports:
       # etcd
-      - 2379:2379
+      - ${U7S_EXPOSED_PORT_ETCD}:2379
       # kube-apiserver
-      - 6443:6443
+      - ${U7S_EXPOSED_PORT_KUBE_APISERVER}:6443
       # kubelet
-      - 10250:10250
+      - ${U7S_EXPOSED_PORT_KUBELET}:10250
       # flannel
-      - 8472:8472/udp
+      - ${U7S_EXPOSED_PORT_FLANNEL}:8472/udp
     volumes:
       - .:/usernetes:ro
       - /boot:/boot:ro

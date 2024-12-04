@@ -7,7 +7,7 @@ kind: ClusterConfiguration
 networking:
   serviceSubnet: "10.96.0.0/16"
   podSubnet: "10.244.0.0/16"
-controlPlaneEndpoint: "${U7S_NODE_NAME}:6443"
+controlPlaneEndpoint: "${U7S_NODE_NAME}:${U7S_EXPOSED_PORT_KUBE_APISERVER}"
 apiServer:
   extraArgs:
     advertise-address: "${U7S_HOST_IP}"
