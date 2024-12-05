@@ -33,7 +33,7 @@ jobs:
     env:
       LIMA_TEMPLATE: "${{ matrix.lima-template }}"
       CONTAINER_ENGINE: "${{ matrix.engine }}"
-      U7S_EXPOSED_PORT_KUBE_APISERVER: "${{ inputs.kube_apiserver_port }}"
+      U7S_PORT_KUBE_APISERVER: "${{ inputs.kube_apiserver_port }}"
       DOCKER_BUILDKIT: 1
       KUBECONFIG: ./kubeconfig
     steps:
