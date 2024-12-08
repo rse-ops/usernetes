@@ -76,6 +76,8 @@ jobs:
     with:
       # Defaults to 6443
       kube_apiserver_port: "8080"
+      # Defaults to 10250
+      kubelet_port: "20250"
       # Defaults to 2379
       etcd_port: "9090"
 
