@@ -9,7 +9,7 @@ export HOSTNAME := $(HOSTNAME)
 # These each need to be separately tested before being enabled, so hard coded for now
 # They will need to be updated (added) in the kubeadm-config.yaml that populates
 # manifests in /etc/kuberenets/manifests
-export U7S_PORT_ETCD := 2379
+export U7S_PORT_ETCD ?= 2379
 export U7S_PORT_KUBELET := 10250
 export U7S_PORT_FLANNEL := 8472
 export U7S_PORT_KUBE_APISERVER ?= 6443
@@ -44,6 +44,7 @@ NODE_SHELL := $(COMPOSE) exec \
 	-e U7S_NODE_SUBNET=$(U7S_NODE_SUBNET) \
 	-e U7S_NODE_IP=$(U7S_NODE_IP) \
 	-e U7S_PORT_KUBE_APISERVER=$(U7S_PORT_KUBE_APISERVER) \
+        -e U7S_PORT_ETCD=$(U7S_PORT_ETCD) \
 	$(NODE_SERVICE_NAME)
 
 ifeq ($(CONTAINER_ENGINE),nerdctl)
