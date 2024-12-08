@@ -8,7 +8,7 @@ export HOSTNAME := $(HOSTNAME)
 # Change ports for different kubernetes services
 export U7S_PORT_ETCD ?= 2379
 export U7S_PORT_KUBELET ?= 10250
-export U7S_PORT_FLANNEL := 8472
+export U7S_PORT_FLANNEL ?= 8472
 export U7S_PORT_KUBE_APISERVER ?= 6443
 
 HOST_IP ?= $(shell ip --json route get 1 | jq -r .[0].prefsrc)
@@ -41,6 +41,7 @@ NODE_SHELL := $(COMPOSE) exec \
 	-e U7S_NODE_SUBNET=$(U7S_NODE_SUBNET) \
 	-e U7S_NODE_IP=$(U7S_NODE_IP) \
 	-e U7S_PORT_KUBE_APISERVER=$(U7S_PORT_KUBE_APISERVER) \
+        -e U7S_PORT_FLANNEL=$(U7S_PORT_FLANNEL) \
         -e U7S_PORT_KUBELET=$(U7S_PORT_KUBELET) \
         -e U7S_PORT_ETCD=$(U7S_PORT_ETCD) \
 	$(NODE_SERVICE_NAME)
@@ -157,4 +158,4 @@ kubeadm-reset:
 
 .PHONY: install-flannel
 install-flannel:
-	$(NODE_SHELL) kubectl apply -f https://github.com/flannel-io/flannel/releases/download/v0.26.1/kube-flannel.yml
+	$(NODE_SHELL) /usernetes/Makefile.d/install-flannel.sh

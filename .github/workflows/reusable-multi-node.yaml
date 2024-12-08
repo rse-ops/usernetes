@@ -7,6 +7,10 @@ on:
         description: kubelet serving port
         type: string
         default: "10250"
+      flannel_port:
+        description: flannel vxlan port
+        type: string
+        default: "8472"
       etcd_port:
         description: etcd service port
         type: string
@@ -42,6 +46,7 @@ jobs:
       LIMA_TEMPLATE: "${{ matrix.lima-template }}"
       CONTAINER_ENGINE: "${{ matrix.engine }}"
       U7S_PORT_KUBE_APISERVER: "${{ inputs.kube_apiserver_port }}"
+      U7S_PORT_FLANNEL: "${{ inputs.flannel_port }}"
       U7S_PORT_KUBELET: "${{ inputs.kubelet_port }}"
       U7S_PORT_ETCD: "${{ inputs.etcd_port }}"
       DOCKER_BUILDKIT: 1
