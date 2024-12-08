@@ -5,65 +5,21 @@ env:
   DOCKER_BUILDKIT: 1
   KUBECONFIG: ./kubeconfig
 jobs:
+  # This uses the reusable-single-node.yaml template
   single-node:
-    name: "Single node"
-    runs-on: ubuntu-24.04
-    timeout-minutes: 40
-    strategy:
-      fail-fast: false
-      matrix:
-        engine: [docker, nerdctl, podman]
-    env:
-      CONTAINER_ENGINE: "${{ matrix.engine }}"
-    steps:
-      - uses: actions/checkout@v4
-      - name: Set up cgroup v2 delegation
-        run: |
-          sudo mkdir -p /etc/systemd/system/user@.service.d
-          cat <<EOF | sudo tee /etc/systemd/system/user@.service.d/delegate.conf
-          [Service]
-          Delegate=cpu cpuset io memory pids
-          EOF
-          sudo systemctl daemon-reload
-      - name: Remove preinstalled Moby
-        # Preinstalled Moby does not contain dockerd-rootless-setuptool.sh
-        run: sudo apt-get remove moby-engine-*
-      - name: Set up Rootless Docker
-        if: ${{ matrix.engine == 'docker' }}
-        run: |
-          set -eux -o pipefail
-          curl https://get.docker.com | sudo sh
-          sudo systemctl disable --now docker.socket docker.service
-          sudo rm -rf /var/run/docker*
-          dockerd-rootless-setuptool.sh install
-          docker info
-      - name: Set up Rootless nerdctl
-        if: ${{ matrix.engine == 'nerdctl' }}
-        run: |
-          set -eux -o pipefail
-          sudo ./init-host/init-host.root.d/install-nerdctl.sh
-          ./init-host/init-host.rootless.sh
-          nerdctl info
-      - name: Set up Rootless Podman
-        if: ${{ matrix.engine == 'podman' }}
-        run: |
-          set -eux -o pipefail
-          sudo apt-get update
-          sudo apt-get install -y podman-compose
-          podman info
-      - run: make up
-      - run: sleep 5
-      - run: make kubeadm-init
-      - run: make install-flannel
-      - run: make kubeconfig
-      - run: kubectl taint nodes --all node-role.kubernetes.io/control-plane-
-      - run: ./hack/test-smoke.sh
-      - name: "Test data persistency after restarting the node"
-        run: |
-          make down
-          make up
-          sleep 30
-          ./hack/test-smoke.sh
+    name: "Single node with defaults"
+    uses: ./.github/workflows/reusable-single-node.yaml
+
+  single-node-custom-ports:
+    name: "Single node with custom service ports"
+    uses: ./.github/workflows/reusable-single-node.yaml
+    with:
+      # Defaults to 6443
+      kube_apiserver_port: "8080"
+      # Defaults to 10250
+      kubelet_port: "20250"
+      # Defaults to 2379
+      etcd_port: "9090"
 
   # This uses the reusable-multi-node.yaml template
   multi-node:
