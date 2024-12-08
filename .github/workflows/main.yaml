@@ -70,9 +70,12 @@ jobs:
     name: "Multi node with defaults"
     uses: ./.github/workflows/reusable-multi-node.yaml
 
-  multi-node-custom-port:
-    name: "Multi node with custom kube-apiserver port"
+  multi-node-custom-ports:
+    name: "Multi node with custom service ports"
     uses: ./.github/workflows/reusable-multi-node.yaml
     with:
       # Defaults to 6443
       kube_apiserver_port: "8080"
+      # Defaults to 2379
+      etcd_port: "9090"
+
